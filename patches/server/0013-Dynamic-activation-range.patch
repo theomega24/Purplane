@@ -28,7 +28,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/gg/airplane/AirplaneConfig.java b/src/main/java/gg/airplane/AirplaneConfig.java
-index f20729e29df9e8e0d54eb1a992077cee3e1d78d6..14e38772df6acfc5f49c8820004a0ddea41a4b77 100644
+index 5e33ce9782e9c22952c7a76f0df1383819f4c97b..eb2d0abce11a94fdf8275540cef020ef3aa82f9b 100644
 --- a/src/main/java/gg/airplane/AirplaneConfig.java
 +++ b/src/main/java/gg/airplane/AirplaneConfig.java
 @@ -41,4 +41,28 @@ public class AirplaneConfig {

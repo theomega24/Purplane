@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/gg/airplane/AirplaneConfig.java b/src/main/java/gg/airplane/AirplaneConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f20729e29df9e8e0d54eb1a992077cee3e1d78d6
+index 0000000000000000000000000000000000000000..5e33ce9782e9c22952c7a76f0df1383819f4c97b
 --- /dev/null
 +++ b/src/main/java/gg/airplane/AirplaneConfig.java
 @@ -0,0 +1,44 @@
