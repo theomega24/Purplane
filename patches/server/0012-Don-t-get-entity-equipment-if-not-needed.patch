@@ -3,7 +3,7 @@ From: Paul Sauve <paul@technove.co>
 Date: Mon, 1 Feb 2021 20:42:26 -0500
 Subject: [PATCH] Don't get entity equipment if not needed
 
-Airplane Lite
+Airplane
 Copyright (C) 2020 Technove LLC
 
 This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index 6889521494f527b29ecc4497673d0a9f5c406475..c552d4a084722f66e548fdb58410b5d9685f33a4 100644
+index 15d74cb75725b4c53747848ca9b034c95a372a2f..653ee05073b458bc9ecaa45d9ab8910e1e37f4c8 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -820,11 +820,13 @@ public abstract class EntityLiving extends Entity {
@@ -29,14 +29,14 @@ index 6889521494f527b29ecc4497673d0a9f5c406475..c552d4a084722f66e548fdb58410b5d9
          if (entity != null) {
 -            ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
 -            Item item = itemstack.getItem();
-+            // AirplaneL start - don't get equipment if not needed
++            // Airplane start - don't get equipment if not needed
 +            // ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
 +            // Item item = itemstack.getItem();
              EntityTypes<?> entitytypes = entity.getEntityType();
  
 -            if (entitytypes == EntityTypes.SKELETON && item == Items.SKELETON_SKULL || entitytypes == EntityTypes.ZOMBIE && item == Items.ZOMBIE_HEAD || entitytypes == EntityTypes.CREEPER && item == Items.CREEPER_HEAD) {
 +            if (entitytypes == EntityTypes.SKELETON && this.getEquipment(EnumItemSlot.HEAD).getItem() == Items.SKELETON_SKULL || entitytypes == EntityTypes.ZOMBIE && this.getEquipment(EnumItemSlot.HEAD).getItem() == Items.ZOMBIE_HEAD || entitytypes == EntityTypes.CREEPER && this.getEquipment(EnumItemSlot.HEAD).getItem() == Items.CREEPER_HEAD) {
-+                // AirplaneL end
++                // Airplane end
                  d0 *= 0.5D;
              }
          }

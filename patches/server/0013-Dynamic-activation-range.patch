@@ -61,14 +61,14 @@ index 5e33ce9782e9c22952c7a76f0df1383819f4c97b..eb2d0abce11a94fdf8275540cef020ef
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 63eb29635957d4e6ce1274ee17a59af62d442d4e..d88380dea04bbf6a213e7a052ad37c705c31a2a1 100644
+index 63eb29635957d4e6ce1274ee17a59af62d442d4e..30d53618410b20d764d8d91e6c0217485164a9d4 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -197,6 +197,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
      public void inactiveTick() { }
      // Spigot end
      public boolean shouldBeRemoved; // Paper
-+    public int activatedPriority = gg.airplane.AirplaneConfig.maximumActivationPrio; // AirplaneL - golf score
++    public int activatedPriority = gg.airplane.AirplaneConfig.maximumActivationPrio; // Airplane - golf score
  
      public float getBukkitYaw() {
          return this.yaw;
@@ -96,7 +96,7 @@ index 4a3469aca9f9e47d2ea3f3bae6ce77f5f11d6b50..d5c3a116014d47aa325d0b749dbf436b
              ++this.conversionTicks;
              if (this.conversionTicks > 300) {
 diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
-index afb64bceb4d39e1d1dd4e89a93b393e1357b764b..4126e1d69cdc4936870e3f989475a44ea45741f9 100644
+index afb64bceb4d39e1d1dd4e89a93b393e1357b764b..d9b48263d417e5745d4075686d30251a64c0b2c2 100644
 --- a/src/main/java/net/minecraft/server/EntityInsentient.java
 +++ b/src/main/java/net/minecraft/server/EntityInsentient.java
 @@ -133,10 +133,10 @@ public abstract class EntityInsentient extends EntityLiving {
@@ -104,11 +104,11 @@ index afb64bceb4d39e1d1dd4e89a93b393e1357b764b..4126e1d69cdc4936870e3f989475a44e
      public void inactiveTick() {
          super.inactiveTick();
 -        if (this.goalSelector.inactiveTick()) {
-+        if (this.goalSelector.inactiveTick(this.activatedPriority)) { // AirplaneL - pass activated priroity
++        if (this.goalSelector.inactiveTick(this.activatedPriority)) { // Airplane - pass activated priroity
              this.goalSelector.doTick();
          }
 -        if (this.targetSelector.inactiveTick()) {
-+        if (this.targetSelector.inactiveTick(this.activatedPriority)) { // AirplaneL - pass activated priroity
++        if (this.targetSelector.inactiveTick(this.activatedPriority)) { // Airplane - pass activated priroity
              this.targetSelector.doTick();
          }
      }
@@ -116,11 +116,11 @@ index afb64bceb4d39e1d1dd4e89a93b393e1357b764b..4126e1d69cdc4936870e3f989475a44e
          this.bo.a();
          this.world.getMethodProfiler().exit();
          this.world.getMethodProfiler().enter("targetSelector");
-+        if (this.targetSelector.inactiveTick(this.activatedPriority)) // AirplaneL - use this to alternate ticking
++        if (this.targetSelector.inactiveTick(this.activatedPriority)) // Airplane - use this to alternate ticking
          this.targetSelector.doTick();
          this.world.getMethodProfiler().exit();
          this.world.getMethodProfiler().enter("goalSelector");
-+        if (this.goalSelector.inactiveTick(this.activatedPriority)) // AirplaneL - use this to alternate ticking
++        if (this.goalSelector.inactiveTick(this.activatedPriority)) // Airplane - use this to alternate ticking
          this.goalSelector.doTick();
          this.world.getMethodProfiler().exit();
          this.world.getMethodProfiler().enter("navigation");
@@ -175,7 +175,7 @@ index eef51f8e5734b897164ca9514e7b49b2678416e6..57a1ba1d7c8513532ec4896bcba2e734
          this.world.getMethodProfiler().exit();
          if (this.bF) {
 diff --git a/src/main/java/net/minecraft/server/PathfinderGoalSelector.java b/src/main/java/net/minecraft/server/PathfinderGoalSelector.java
-index 9cad895c7d008487ce885cbcc2c3966645df4c19..684e90b8ae0543fbcf4c2536c90a144229f3ee48 100644
+index 9cad895c7d008487ce885cbcc2c3966645df4c19..2ce5e07f4dcd0c76073840c35be66b7c65c6e7e8 100644
 --- a/src/main/java/net/minecraft/server/PathfinderGoalSelector.java
 +++ b/src/main/java/net/minecraft/server/PathfinderGoalSelector.java
 @@ -43,9 +43,14 @@ public class PathfinderGoalSelector {
@@ -185,9 +185,9 @@ index 9cad895c7d008487ce885cbcc2c3966645df4c19..684e90b8ae0543fbcf4c2536c90a1442
 -    public boolean inactiveTick() {
 -        incRate();
 -        return getCurRate() % getTickRate() == 0;
-+    public boolean inactiveTick(int tickRate) { // AirplaneL - take tick rate
-+        tickRate = Math.max(tickRate, getTickRate()); // AirplaneL
-+        if (this.curRate++ % tickRate != 0) { // AirplaneL - use tick rate / increment curRate every tick
++    public boolean inactiveTick(int tickRate) { // Airplane - take tick rate
++        tickRate = Math.max(tickRate, getTickRate()); // Airplane
++        if (this.curRate++ % tickRate != 0) { // Airplane - use tick rate / increment curRate every tick
 +            //incRate();
 +            return false;
 +        } else {
@@ -197,14 +197,14 @@ index 9cad895c7d008487ce885cbcc2c3966645df4c19..684e90b8ae0543fbcf4c2536c90a1442
      public boolean hasTasks() {
          for (PathfinderGoalWrapped task : getTasks()) {
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index ff0621e08aaf058154f228abd46475ffaa3920cf..517c3a715566ec18cfa7d43e59eb8ea811fed077 100644
+index ff0621e08aaf058154f228abd46475ffaa3920cf..2d9833392fbb4f051383390cc3cccb540be02b7c 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
 @@ -50,6 +50,7 @@ import net.minecraft.server.EntityInsentient;
  import net.minecraft.server.EntityLlama;
  import net.minecraft.server.EntityWaterAnimal;
  // Paper end
-+import net.minecraft.server.Vec3D; // AirplaneL
++import net.minecraft.server.Vec3D; // Airplane
  
  public class ActivationRange
  {
@@ -213,7 +213,7 @@ index ff0621e08aaf058154f228abd46475ffaa3920cf..517c3a715566ec18cfa7d43e59eb8ea8
                      if ( chunk != null )
                      {
 -                        activateChunkEntities( chunk );
-+                        activateChunkEntities( chunk, player.getPositionVector() ); // AirplaneL
++                        activateChunkEntities( chunk, player.getPositionVector() ); // Airplane
                      }
                  }
              }
@@ -222,7 +222,7 @@ index ff0621e08aaf058154f228abd46475ffaa3920cf..517c3a715566ec18cfa7d43e59eb8ea8
       * @param chunk
       */
 -    private static void activateChunkEntities(Chunk chunk)
-+    private static void activateChunkEntities(Chunk chunk, Vec3D playerVec) // AirplaneL - add player location
++    private static void activateChunkEntities(Chunk chunk, Vec3D playerVec) // Airplane - add player location
      {
          // Paper start
          Entity[] rawData = chunk.entities.getRawData();
@@ -230,7 +230,7 @@ index ff0621e08aaf058154f228abd46475ffaa3920cf..517c3a715566ec18cfa7d43e59eb8ea8
              //for ( Entity entity : (Collection<Entity>) slice )
              // Paper end
              {
-+                // AirplaneL start
++                // Airplane start
 +                Vec3D entityVec = entity.getPositionVector();
 +                double diffX = playerVec.x - entityVec.x, diffY = playerVec.y - entityVec.y, diffZ = playerVec.z - entityVec.z;
 +                int priority = Math.max(1, (int) (diffX * diffX + diffY * diffY + diffZ * diffZ) >> gg.airplane.AirplaneConfig.activationDistanceMod);
@@ -241,7 +241,7 @@ index ff0621e08aaf058154f228abd46475ffaa3920cf..517c3a715566ec18cfa7d43e59eb8ea8
 +                    entity.activatedPriority = Math.min(gg.airplane.AirplaneConfig.maximumActivationPrio, priority);
 +                } else {
 +                    entity.activatedPriority = Math.min(gg.airplane.AirplaneConfig.maximumActivationPrio, Math.min(priority, entity.activatedPriority));
-+                    // AirplaneL end
++                    // Airplane end
                  }
              }
          }

@@ -3,7 +3,7 @@ From: Paul Sauve <paul@technove.co>
 Date: Mon, 1 Feb 2021 20:36:08 -0500
 Subject: [PATCH] Only check for spooky season once an hour
 
-Airplane Lite
+Airplane
 Copyright (C) 2020 Technove LLC
 
 This program is free software: you can redistribute it and/or modify
