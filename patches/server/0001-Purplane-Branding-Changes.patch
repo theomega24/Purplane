@@ -48,10 +48,10 @@ index 645213cacb6061f84da7a1c9d6f2fa94670346ff..2c705ad1a4bccf532da9c0d59b6b5d27
          serverModName = getString("settings.server-mod-name", serverModName);
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 413c55feb6b1c2ddc80aa8dc1c83ed13b2c4c4a5..61f3ba02fb98d137e32b588812359d270e95280f 100644
+index dfe6777db04bb550ae0e761addd26b2d5abf3baf..4d5c71dbad9197114f46719257f8351578b26ba5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
+@@ -231,7 +231,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
