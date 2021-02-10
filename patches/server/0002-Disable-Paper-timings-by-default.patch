@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Paul Sauve <paul@technove.co>
+Date: Tue, 9 Feb 2021 19:58:39 -0500
+Subject: [PATCH] Disable Paper timings by default
+
+Airplane
+Copyright (C) 2020 Technove LLC
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+index ce14283dd1a1fddbea17c2fbaf1c4ef9d7a7479f..77563e8f9534761438f0e44e4fc09e76d6ab5499 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+@@ -207,6 +207,15 @@ public class PaperConfig {
+     public static String timingsServerName;
+     private static void timings() {
+         boolean timings = getBoolean("timings.enabled", true);
++        // Airplane start
++        boolean reallyEnableTimings = getBoolean("timings.really-enabled", false);
++        if (timings && !reallyEnableTimings) {
++            Bukkit.getLogger().log(Level.WARNING, "[Airplane] To improve performance, timings have been disabled by default");
++            Bukkit.getLogger().log(Level.WARNING, "[Airplane] You can still use timings by using /timings on, but they will not start on server startup unless you set timings.really-enabled to true in paper.yml");
++            Bukkit.getLogger().log(Level.WARNING, "[Airplane] If you would like to disable this message, either set timings.really-enabled to true or timings.enabled to false.");
++        }
++        timings = reallyEnableTimings;
++        // Airplane end
+         boolean verboseTimings = getBoolean("timings.verbose", true);
+         TimingsManager.privacy = getBoolean("timings.server-name-privacy", false);
+         TimingsManager.hiddenConfigs = getList("timings.hidden-config-entries", Lists.newArrayList("database", "settings.bungeecord-addresses", "settings.velocity-support.secret"));
