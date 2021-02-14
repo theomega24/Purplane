@@ -3,8 +3,7 @@ i wanted to use Purpur and Airplane but it didn't exist so i made one...
 
 btw if you want config stuff look at [purpur](https://pl3xgaming.github.io/PurpurDocs) or airplane docs
 
-also people told me this was dumb and stuff so um... dont use it idk **i wont give support**
-and also if you want my opinion on the best fork its purpur
+download here https://ci.notom3ga.me/job/Purplane/
 
 join my discord if you want https://discord.gg/qJ2k4Bbcd7
 
