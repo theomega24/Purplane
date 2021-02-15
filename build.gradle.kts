@@ -9,8 +9,7 @@ plugins {
 toothpick {
     forkName = "Purplane"
     groupId = "me.notom3ga"
-    val versionTag = System.getenv("BUILD_NUMBER")
-        ?: "\"${gitCmd("rev-parse", "--short", "HEAD").output}\""
+    val versionTag = "\"${gitCmd("rev-parse", "--short", "HEAD").output}\""
     forkVersion = "git-$forkName-$versionTag"
     forkUrl = "https://github.com/notOM3GA/Purplane"
 
