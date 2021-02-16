@@ -71,7 +71,7 @@ index 631eb682e81e30d2a937fd1eafccd8a9ab82d21e..dc07376845f84ea949a2153cb75d2cd9
          return (EntityTypes) IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, s, (Object) entitytypes_builder.a(s));
      }
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index a42571cfd2c9c80df27e59db832cb64c2a64e141..8be07cb96403060b5f0a04a985513ee7dbb53719 100644
+index 2c2becef8b56d7e5e998976222df85d2c8516c43..07e8c6c47fb8c027a74323b418e3ceb2f30aa802 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
 @@ -638,7 +638,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
@@ -106,7 +106,7 @@ index a42571cfd2c9c80df27e59db832cb64c2a64e141..8be07cb96403060b5f0a04a985513ee7
  
          return Math.max(Math.abs(k), Math.abs(l));
      }
-@@ -2498,11 +2504,17 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2496,11 +2502,17 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
                      boolean flag1 = this.tracker.attachedToPlayer;
  
                      if (!flag1) {
@@ -126,7 +126,7 @@ index a42571cfd2c9c80df27e59db832cb64c2a64e141..8be07cb96403060b5f0a04a985513ee7
                          }
                      }
  
-@@ -2532,8 +2544,10 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2530,8 +2542,10 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
          }
  
          private int b() {
@@ -138,7 +138,7 @@ index a42571cfd2c9c80df27e59db832cb64c2a64e141..8be07cb96403060b5f0a04a985513ee7
              Iterator iterator = collection.iterator();
  
              while (iterator.hasNext()) {
-@@ -2545,6 +2559,8 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2543,6 +2557,8 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
                      i = j;
                  }
              }
@@ -175,10 +175,10 @@ index 6e6059daba05d7ce3aabeed85cc0e0d2daa04f92..6e4c7a9b32c9e8057db3cbcead0b75d8
      // Paper start - Prevent armor stands from doing entity lookups
      @Override
 diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
-index 56f8ecd862b02d8fceb45021402b254b6bf181fb..cc986900d6ba1580b6d3317af5d8dc46b790fe93 100644
+index 601eecc446b74074fc7972509129e85e1af0cfc4..ab2872a99dd7699e1950ba58c92e6e86002e4b97 100644
 --- a/src/main/java/net/minecraft/server/WorldServer.java
 +++ b/src/main/java/net/minecraft/server/WorldServer.java
-@@ -907,7 +907,28 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+@@ -915,7 +915,28 @@ public class WorldServer extends World implements GeneratorAccessSeed {
  
                  gameprofilerfiller.enter("tick");
                  if (!entity.dead && !(entity instanceof EntityComplexPart)) {
@@ -207,7 +207,7 @@ index 56f8ecd862b02d8fceb45021402b254b6bf181fb..cc986900d6ba1580b6d3317af5d8dc46
                  }
  
                  gameprofilerfiller.exit();
-@@ -1278,9 +1299,14 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+@@ -1286,9 +1307,14 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                  ++entity.ticksLived;
                  GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
  
