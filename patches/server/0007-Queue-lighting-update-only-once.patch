@@ -20,10 +20,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-index fdbf984e64f135abfdee465d76eb1112bccfa8c3..4a6914ba1de9692a140dd2a045621e1c9abe742a 100644
+index 18270d44185b0ec41b9b6e1d2135e7aae3b33261..055cc4c27718fd63ad7d0302420c33ff03993ea9 100644
 --- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
 +++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-@@ -1004,6 +1004,7 @@ public class ChunkProviderServer extends IChunkProvider {
+@@ -1006,6 +1006,7 @@ public class ChunkProviderServer extends IChunkProvider {
              // Paper - moved up
              // Tuinity start - optimise chunk tick iteration
              com.tuinity.tuinity.util.maplist.IteratorSafeOrderedReferenceSet.Iterator<Chunk> iterator = this.entityTickingChunks.iterator();
@@ -31,16 +31,16 @@ index fdbf984e64f135abfdee465d76eb1112bccfa8c3..4a6914ba1de9692a140dd2a045621e1c
              try {
              while (iterator.hasNext()) {
                  Chunk chunk = iterator.next();
-@@ -1028,7 +1029,7 @@ public class ChunkProviderServer extends IChunkProvider {
+@@ -1030,7 +1031,7 @@ public class ChunkProviderServer extends IChunkProvider {
                              }
  
                              this.world.timings.chunkTicks.startTiming(); // Spigot // Paper
 -                            this.world.a(chunk, k);
 +                            if (this.world.abool(chunk, k)) updateLighting = true; // Airplane
                              this.world.timings.chunkTicks.stopTiming(); // Spigot // Paper
-                             MinecraftServer.getServer().executeMidTickTasks(); // Tuinity - exec chunk tasks during world tick
+                             if ((++ticked & 1) == 0) MinecraftServer.getServer().executeMidTickTasks(); // Tuinity - exec chunk tasks during world tick
                          }
-@@ -1037,6 +1038,7 @@ public class ChunkProviderServer extends IChunkProvider {
+@@ -1039,6 +1040,7 @@ public class ChunkProviderServer extends IChunkProvider {
              } // Tuinity start - optimise chunk tick iteration
              } finally {
                  iterator.finishedIterating();
@@ -49,10 +49,10 @@ index fdbf984e64f135abfdee465d76eb1112bccfa8c3..4a6914ba1de9692a140dd2a045621e1c
              // Tuinity end - optimise chunk tick iteration
              this.world.getMethodProfiler().enter("customSpawners");
 diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
-index a873d60875b2c08c8813cb365566e46ee99cb625..8f5c1d47cefddab018c59eee179b527fac1a4c06 100644
+index 5d92398369862881d997c270671ddb6b78ed2cb4..912093d209a3bd4d5e31b7088c18fa68e1e74304 100644
 --- a/src/main/java/net/minecraft/server/WorldServer.java
 +++ b/src/main/java/net/minecraft/server/WorldServer.java
-@@ -1027,7 +1027,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+@@ -1124,7 +1124,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
      private final com.destroystokyo.paper.util.math.ThreadUnsafeRandom randomTickRandom = new com.destroystokyo.paper.util.math.ThreadUnsafeRandom();
      // Paper end
  
@@ -64,18 +64,14 @@ index a873d60875b2c08c8813cb365566e46ee99cb625..8f5c1d47cefddab018c59eee179b527f
          ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
          boolean flag = this.isRaining();
          int j = chunkcoordintpair.d();
-@@ -1136,9 +1139,13 @@ public class WorldServer extends World implements GeneratorAccessSeed {
-             }
+@@ -1234,8 +1237,10 @@ public class WorldServer extends World implements GeneratorAccessSeed {
              gameprofilerfiller.exit();
              timings.chunkTicksBlocks.stopTiming(); // Paper
--            getChunkProvider().getLightEngine().queueUpdate(); // Paper
-+            // Airplane start
-+            // getChunkProvider().getLightEngine().queueUpdate(); // Paper
-+            return true;
-+            // Airplane end
+             //getChunkProvider().getLightEngine().queueUpdate(); // Paper // Tuinity - no longer needed here, moved into task execution
++            return true; // Airplane
              // Paper end
          }
-+        return false;
++        return false; // Airplane
      }
  
      protected BlockPosition a(BlockPosition blockposition) {

@@ -23,10 +23,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
-index 8f5c1d47cefddab018c59eee179b527fac1a4c06..54abb3b2d550b1ab2306e7225618acd09d87db59 100644
+index 912093d209a3bd4d5e31b7088c18fa68e1e74304..a58cef0c904c355810227f961d0d0c16de2cc4f4 100644
 --- a/src/main/java/net/minecraft/server/WorldServer.java
 +++ b/src/main/java/net/minecraft/server/WorldServer.java
-@@ -1040,7 +1040,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+@@ -1137,7 +1137,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
          gameprofilerfiller.enter("thunder");
          final BlockPosition.MutableBlockPosition blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
  
