@@ -12,3 +12,8 @@ dependencies {
 java {
     withJavadocJar()
 }
+
+publishing.repositories.maven {
+    url = uri("https://repo.notom3ga.me/releases")
+    credentials(PasswordCredentials::class)
+}

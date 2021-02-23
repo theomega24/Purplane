@@ -3,6 +3,7 @@ import xyz.jpenilla.toothpick.toothpick
 
 plugins {
     `java-library`
+    `maven-publish`
     id("xyz.jpenilla.toothpick") version "1.0.0-SNAPSHOT"
 }
 
