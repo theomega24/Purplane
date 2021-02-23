@@ -175,7 +175,7 @@ index 44f52fb6e3aedeadec4be3979ad1c625643cf9fa..8c162c5fdeaffccc9a28b592e030971f
      // Paper start - Prevent armor stands from doing entity lookups
      @Override
 diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
-index cdfb82045b88464f6ad1c525d0d5ce267ddbead6..0999a868d4c08ebfdd0c1b9a781a1542e30746b4 100644
+index 1940c959c41a4c8fb4ae11f2c8e64339b0b0a55e..90626bd6cb9c70e4e8696613e7ad22b28063acbd 100644
 --- a/src/main/java/net/minecraft/server/WorldServer.java
 +++ b/src/main/java/net/minecraft/server/WorldServer.java
 @@ -1012,7 +1012,28 @@ public class WorldServer extends World implements GeneratorAccessSeed {
@@ -207,7 +207,7 @@ index cdfb82045b88464f6ad1c525d0d5ce267ddbead6..0999a868d4c08ebfdd0c1b9a781a1542
                  }
  
                  gameprofilerfiller.exit();
-@@ -1381,9 +1402,14 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+@@ -1376,9 +1397,14 @@ public class WorldServer extends World implements GeneratorAccessSeed {
                  ++entity.ticksLived;
                  GameProfilerFiller gameprofilerfiller = this.getMethodProfiler();
  
