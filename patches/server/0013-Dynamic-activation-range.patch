@@ -60,7 +60,7 @@ index 5e33ce9782e9c22952c7a76f0df1383819f4c97b..eb2d0abce11a94fdf8275540cef020ef
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 45d29df580feba2d3e88755ff970de59a5ed7d34..c39620527093edc4eb9f5e9fa73436f98a79310d 100644
+index e0a508a596eaf4438a84c81f8e684e840cb076fe..b37692c3632fe2cf79f6a04a1947855259dff768 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -197,6 +197,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke

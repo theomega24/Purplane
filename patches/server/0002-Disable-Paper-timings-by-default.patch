@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index ce14283dd1a1fddbea17c2fbaf1c4ef9d7a7479f..77563e8f9534761438f0e44e4fc09e76d6ab5499 100644
+index 4b9fdb4f04b333ce32f7fca8f279bf989e6fd728..ad7df9e8a2cfc6fe65b193adfb65c7b32d6c92b3 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -207,6 +207,15 @@ public class PaperConfig {
