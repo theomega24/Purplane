@@ -71,7 +71,7 @@ index f5fb3b3c08a05bede7ed1141c018bd0d16a19244..b38e7c40fe9cb56cb37769ce3a8c7969
          return (EntityTypes) IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, s, (Object) entitytypes_builder.a(s));
      }
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index 61570ab947b5a153a4c2bcb5a09344f060e6052d..c2458fb045a7c0ff84349c96d314ff8dfa65ccf8 100644
+index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c068ad8970 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
 @@ -641,7 +641,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {

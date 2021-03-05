@@ -61,7 +61,7 @@ index 286e2964f672b75f18c48541ec1760eb9278bb1e..764bbec9133bc7fe0c27ebf85514b0a7
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 821b8665b4ed70c010a0824df99de2667fd4c8ba..f0832bee46f247c7a2c9d6c129e01371100e9cde 100644
+index a73ed438df34d494242f680e08110f4b9eba01c6..f4e4093e270b43232b7697debf92c9c1e1c824c2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -370,7 +370,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
