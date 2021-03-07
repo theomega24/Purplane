@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/gg/airplane/AirplaneCommand.java b/src/main/java/gg/airplane/AirplaneCommand.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c4ca0e91a6f958f8f02209501ba08b4cc65e1626
+index 0000000000000000000000000000000000000000..b5c6b070c7e43801da59c4a178f0a15b56a4e9cb
 --- /dev/null
 +++ b/src/main/java/gg/airplane/AirplaneCommand.java
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,60 @@
 +package gg.airplane;
 +
 +import net.md_5.bungee.api.ChatColor;
@@ -40,10 +40,6 @@ index 0000000000000000000000000000000000000000..c4ca0e91a6f958f8f02209501ba08b4c
 +import java.util.stream.Stream;
 +
 +public class AirplaneCommand extends Command {
-+
-+    public static void register() {
-+        MinecraftServer.getServer().server.getCommandMap().register("airplane", "Airplane", new AirplaneCommand());
-+    }
 +
 +    public AirplaneCommand() {
 +        super("airplane");
@@ -138,6 +134,23 @@ index 0000000000000000000000000000000000000000..5e33ce9782e9c22952c7a76f0df13838
 +        } catch (IOException e) {
 +            e.printStackTrace();
 +        }
++    }
++}
+diff --git a/src/main/java/gg/airplane/commands/AirplaneCommands.java b/src/main/java/gg/airplane/commands/AirplaneCommands.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..07464cea98e764e216eb3276f39c45d1b8d5231c
+--- /dev/null
++++ b/src/main/java/gg/airplane/commands/AirplaneCommands.java
+@@ -0,0 +1,11 @@
++package gg.airplane.commands;
++
++import gg.airplane.AirplaneCommand;
++import net.minecraft.server.MinecraftServer;
++
++public class AirplaneCommands {
++
++    public static void init() {
++        MinecraftServer.getServer().server.getCommandMap().register("airplane", "Airplane", new AirplaneCommand());
 +    }
 +}
 diff --git a/src/main/java/gg/airplane/manual/ManualParser.java b/src/main/java/gg/airplane/manual/ManualParser.java
@@ -354,7 +367,7 @@ index 0000000000000000000000000000000000000000..b8a7bcc73710a04d8518169982145f56
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index e3721b53db68171665ba05201155d088ae3cb89f..5d0eb1ebe07a01e9d9a0ab2968be032f1b847075 100644
+index e3721b53db68171665ba05201155d088ae3cb89f..b8a45c80b6691214e513286262f31b7b5b1dd5eb 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -185,6 +185,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -362,7 +375,7 @@ index e3721b53db68171665ba05201155d088ae3cb89f..5d0eb1ebe07a01e9d9a0ab2968be032f
          // Paper end
          com.tuinity.tuinity.config.TuinityConfig.init((java.io.File) options.valueOf("tuinity-settings")); // Tuinity - Server Config
 +        gg.airplane.AirplaneConfig.load(); // Airplane - config
-+        gg.airplane.AirplaneCommand.register(); // Airplane - command
++        gg.airplane.commands.AirplaneCommands.init(); // Airplane - command
  
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
