@@ -365,12 +365,14 @@ index 0000000000000000000000000000000000000000..cfa09467e0780955efa4f8d44a81caea
 \ No newline at end of file
 diff --git a/src/main/java/gg/airplane/flare/FlareSetup.java b/src/main/java/gg/airplane/flare/FlareSetup.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8265d5045a33c1212f04f2c32f915c5b1be1ecf0
+index 0000000000000000000000000000000000000000..5a42f73a46e358de4bce61b4630a1b8af8d8827c
 --- /dev/null
 +++ b/src/main/java/gg/airplane/flare/FlareSetup.java
-@@ -0,0 +1,121 @@
+@@ -0,0 +1,139 @@
 +package gg.airplane.flare;
 +
++import com.google.common.cache.Cache;
++import com.google.common.cache.CacheBuilder;
 +import gg.airplane.AirplaneConfig;
 +import gg.airplane.AirplaneLogger;
 +import gg.airplane.compat.ServerConfigurations;
@@ -386,32 +388,48 @@ index 0000000000000000000000000000000000000000..8265d5045a33c1212f04f2c32f915c5b
 +import java.util.HashMap;
 +import java.util.LinkedHashMap;
 +import java.util.Map;
++import java.util.concurrent.TimeUnit;
 +import java.util.logging.Level;
 +
 +public class FlareSetup {
 +
 +    public static void init() {
 +        ServerConnector.connector = new ServerConnector() {
++
++            private final Cache<String, String> pluginNameCache = CacheBuilder.newBuilder()
++                    .expireAfterAccess(1, TimeUnit.MINUTES)
++                    .maximumSize(1024)
++                    .build();
++
 +            @Override
 +            public String getPluginForClass(String name) {
 +                if (name.contains(".") && name.charAt(0) != '/') {
-+                                       if (name.startsWith("net.minecraft") || name.startsWith("java.") || name.startsWith("com.mojang") || name.startsWith("it.unimi") || name.startsWith("sun")) {
-+                                           return null;
-+                                       }
++                    if (name.startsWith("net.minecraft") || name.startsWith("java.") || name.startsWith("com.mojang") || name.startsWith("com.google") || name.startsWith("it.unimi") || name.startsWith("sun")) {
++                        return null;
++                    }
 +
-+                                       String className = name.substring(0, name.lastIndexOf("."));
-+                                       for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-+                                           ClassLoader classLoader = plugin.getClass().getClassLoader();
-+                                           if (classLoader instanceof PluginClassLoader) {
-+                                               try {
-+                                                   Class<?> aClass = ((PluginClassLoader) classLoader)._airplane_findClass(className, false);
-+                                                   if (aClass != null) {
-+                                                       return plugin.getName();
-+                                                   }
-+                                               } catch (ClassNotFoundException e) {
-+                                               }
-+                                           }
-+                                       }
++                    String className = name.substring(0, name.lastIndexOf("."));
++                    String existing = pluginNameCache.getIfPresent(name);
++                    if (existing != null) {
++                        return existing.isEmpty() ? null : existing;
++                    }
++
++                    String newValue = "";
++
++                    for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
++                        ClassLoader classLoader = plugin.getClass().getClassLoader();
++                        if (classLoader instanceof PluginClassLoader) {
++                            try {
++                                Class<?> aClass = ((PluginClassLoader) classLoader)._airplane_findClass(className);
++                                if (aClass != null) {
++                                    newValue = plugin.getName();
++                                }
++                            } catch (ClassNotFoundException | IllegalAccessError e) {
++                            }
++                        }
++                    }
++
++                    pluginNameCache.put(name, newValue);
 +                }
 +                return null;
 +            }
@@ -492,10 +510,10 @@ index 0000000000000000000000000000000000000000..8265d5045a33c1212f04f2c32f915c5b
 +}
 diff --git a/src/main/java/gg/airplane/flare/ProfilingManager.java b/src/main/java/gg/airplane/flare/ProfilingManager.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c7414d9690723612241677553dea1895cdfc2c25
+index 0000000000000000000000000000000000000000..233b00669ca949c47ca2be5bfeb99ea47d8f5c9e
 --- /dev/null
 +++ b/src/main/java/gg/airplane/flare/ProfilingManager.java
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,65 @@
 +package gg.airplane.flare;
 +
 +import gg.airplane.AirplaneConfig;
@@ -544,10 +562,18 @@ index 0000000000000000000000000000000000000000..c7414d9690723612241677553dea1895
 +            return false;
 +        }
 +        AirplaneLogger.LOGGER.log(Level.INFO, "Flare has been stopped: " + getProfilingUrl().orElse("An error occurred retrieving the Flare URL."));
-+        currentController.cancel();
++        try {
++            currentController.cancel();
++        } catch (Throwable t) {
++            AirplaneLogger.LOGGER.log(Level.WARNING, "Error occurred stopping Flare", t);
++        }
 +        currentController = null;
 +
-+        currentTask.cancel();
++        try {
++            currentTask.cancel();
++        } catch (Throwable t) {
++            AirplaneLogger.LOGGER.log(Level.WARNING, "Error occurred stopping Flare", t);
++        }
 +        currentTask = null;
 +        return true;
 +    }
@@ -567,10 +593,34 @@ index b8a45c80b6691214e513286262f31b7b5b1dd5eb..a85a844a4766cde16eea9e814abfec29
          this.setPVP(dedicatedserverproperties.pvp);
          this.setAllowFlight(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-index 49dc0c441b9dd7e7745cf15ced67f383ebee1f99..28339754932e7b88a3e2b2ba82608fef013a3de0 100644
+index 49dc0c441b9dd7e7745cf15ced67f383ebee1f99..b343d8ee7435312929558efdaf127334d8e2fff6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-@@ -82,7 +82,7 @@ public class MinecraftInternalPlugin extends PluginBase {
+@@ -19,7 +19,8 @@ public class MinecraftInternalPlugin extends PluginBase {
+     private boolean enabled = true;
+ 
+     private final String pluginName;
+-    private PluginDescriptionFile pdf;
++    private org.bukkit.plugin.PluginLogger logger;
++    private PluginDescriptionFile pdf; // Airplane
+ 
+     public MinecraftInternalPlugin() {
+         this.pluginName = "Minecraft";
+@@ -72,7 +73,12 @@ public class MinecraftInternalPlugin extends PluginBase {
+ 
+     @Override
+     public PluginLogger getLogger() {
+-        throw new UnsupportedOperationException("Not supported.");
++        // Airplane start
++        if (this.logger == null) {
++            this.logger = new org.bukkit.plugin.PluginLogger(this); // Airplane
++        }
++        return this.logger;
++        // Airplane end
+     }
+ 
+     @Override
+@@ -82,7 +88,7 @@ public class MinecraftInternalPlugin extends PluginBase {
  
      @Override
      public Server getServer() {
