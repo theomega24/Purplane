@@ -88,7 +88,7 @@ index 0000000000000000000000000000000000000000..b5c6b070c7e43801da59c4a178f0a15b
 \ No newline at end of file
 diff --git a/src/main/java/gg/airplane/AirplaneConfig.java b/src/main/java/gg/airplane/AirplaneConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5e33ce9782e9c22952c7a76f0df1383819f4c97b
+index 0000000000000000000000000000000000000000..f20729e29df9e8e0d54eb1a992077cee3e1d78d6
 --- /dev/null
 +++ b/src/main/java/gg/airplane/AirplaneConfig.java
 @@ -0,0 +1,44 @@
@@ -108,7 +108,7 @@ index 0000000000000000000000000000000000000000..5e33ce9782e9c22952c7a76f0df13838
 +
 +    public static void load() {
 +        try {
-+            manual = new ManualParser(new File("purplane.air"));
++            manual = new ManualParser(new File("airplane.air"));
 +        } catch (IOException e) {
 +            e.printStackTrace();
 +        }
