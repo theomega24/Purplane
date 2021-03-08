@@ -119,7 +119,7 @@ index 07464cea98e764e216eb3276f39c45d1b8d5231c..083fdfc4b4edfb06c931ce6b70ec7cac
  }
 diff --git a/src/main/java/gg/airplane/compat/ServerConfigurations.java b/src/main/java/gg/airplane/compat/ServerConfigurations.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..48a810f8a73303502df7158d82716d263f8a7397
+index 0000000000000000000000000000000000000000..9931a43afe2584f403ad984e16308803e25d9480
 --- /dev/null
 +++ b/src/main/java/gg/airplane/compat/ServerConfigurations.java
 @@ -0,0 +1,76 @@
@@ -148,7 +148,7 @@ index 0000000000000000000000000000000000000000..48a810f8a73303502df7158d82716d26
 +            "spigot.yml",
 +            "paper.yml",
 +            "tuinity.yml",
-+            "airplane.air"
++            "purplane.air"
 +    };
 +
 +    public static String getCleanCopy(String configName) throws IOException {
