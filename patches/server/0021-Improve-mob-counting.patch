@@ -1,0 +1,184 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Paul Sauve <paul@technove.co>
+Date: Tue, 9 Mar 2021 13:41:27 -0500
+Subject: [PATCH] Improve mob counting
+
+Airplane
+Copyright (C) 2020 Technove LLC
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+index e8a6bc2654e840395fee70d79695c5a395a4fc1b..168c164df81c96a2ceb61ef2855c73a9a8d18719 100644
+--- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+@@ -991,9 +991,9 @@ public class ChunkProviderServer extends IChunkProvider {
+                 for (EntityPlayer player : this.world.players) {
+                     Arrays.fill(player.mobCounts, 0);
+                 }
+-                spawnercreature_d = SpawnerCreature.countMobs(l, this.world.A(), this::a, true);
++                spawnercreature_d = SpawnerCreature.countMobs(l, this.world.A(), this::a, true, this.p); // Airplane - add p
+             } else {
+-                spawnercreature_d = SpawnerCreature.countMobs(l, this.world.A(), this::a, false);
++                spawnercreature_d = SpawnerCreature.countMobs(l, this.world.A(), this::a, false, this.p); // Airplane - add p
+             }
+             // Paper end
+             this.world.timings.countNaturalMobs.stopTiming(); // Paper - timings
+diff --git a/src/main/java/net/minecraft/server/SpawnerCreature.java b/src/main/java/net/minecraft/server/SpawnerCreature.java
+index 1016305a571a2fc211cd0e58b7210d8cfb4461d5..d952cd0c9044d0fcaeacc1899fff9acae1e30c32 100644
+--- a/src/main/java/net/minecraft/server/SpawnerCreature.java
++++ b/src/main/java/net/minecraft/server/SpawnerCreature.java
+@@ -30,14 +30,26 @@ public final class SpawnerCreature {
+ 
+     public static SpawnerCreature.d a(int i, Iterable<Entity> iterable, SpawnerCreature.b spawnercreature_b) {
+         // Paper start - add countMobs parameter
+-        return countMobs(i, iterable, spawnercreature_b, false);
++        return countMobs(i, iterable, spawnercreature_b, false, null); // Airplane
+     }
+-    public static SpawnerCreature.d countMobs(int i, Iterable<Entity> iterable, SpawnerCreature.b spawnercreature_b, boolean countMobs) {
++    public static SpawnerCreature.d countMobs(int i, Iterable<Entity> iterable, SpawnerCreature.b spawnercreature_b, boolean countMobs, SpawnerCreature.d data) { // Airplane - add reusable mob spawning data
+         // Paper end - add countMobs parameter
++        // Airplane start - reuse same object
++        if (data == null) {
++            data = new SpawnerCreature.d(i);
++        } else {
++            data.reset(i);
++        }
++        SpawnerCreature.d spawnercreatureprobabilities = data;
++        // Airplane - remove creation of new objects
++        /*
+         SpawnerCreatureProbabilities spawnercreatureprobabilities = new SpawnerCreatureProbabilities();
+         Object2IntOpenHashMap<EnumCreatureType> object2intopenhashmap = new Object2IntOpenHashMap();
++         */
+         Iterator iterator = iterable.iterator();
+ 
++        final Chunk[] lastChunk = {null}; // cache chunk since entities in the list next to each other are likely to be in similar chunks
++        long lastChunkId = 0;
+         while (iterator.hasNext()) {
+             Entity entity = (Entity) iterator.next();
+ 
+@@ -63,24 +75,36 @@ public final class SpawnerCreature {
+                 BlockPosition blockposition = entity.getChunkCoordinates();
+                 long j = ChunkCoordIntPair.pair(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+ 
+-                spawnercreature_b.query(j, (chunk) -> {
++                Consumer<Chunk> chunkConsumer = (chunk) -> {
++                    lastChunk[0] = chunk;
+                     BiomeSettingsMobs.b biomesettingsmobs_b = b(blockposition, chunk).b().a(entity.getEntityType());
+ 
+                     if (biomesettingsmobs_b != null) {
+-                        spawnercreatureprobabilities.a(entity.getChunkCoordinates(), biomesettingsmobs_b.b());
++                        spawnercreatureprobabilities.c.a(entity.getChunkCoordinates(), biomesettingsmobs_b.b());
+                     }
+ 
+-                    object2intopenhashmap.addTo(enumcreaturetype, 1);
++                    spawnercreatureprobabilities.b.addTo(enumcreaturetype, 1);
+                     // Paper start
+                     if (countMobs) {
+                         ((WorldServer)chunk.world).getChunkProvider().playerChunkMap.updatePlayerMobTypeMap(entity);
+                     }
+                     // Paper end
+-                });
++                };
++
++                // Airplane - implement cache of last chunk
++                if (lastChunk[0] != null && lastChunkId == j) {
++                    chunkConsumer.accept(lastChunk[0]);
++                } else {
++                    spawnercreature_b.query(j, chunkConsumer);
++                    lastChunkId = j;
++                }
++                // Airplane end
+             }
+         }
+ 
+-        return new SpawnerCreature.d(i, object2intopenhashmap, spawnercreatureprobabilities);
++        //return new SpawnerCreature.d(i, object2intopenhashmap, spawnercreatureprobabilities);
++        return data;
++        // Airplane end
+     }
+ 
+     private static BiomeBase b(BlockPosition blockposition, IChunkAccess ichunkaccess) {
+@@ -529,8 +553,8 @@ public final class SpawnerCreature {
+ 
+     public static class d {
+ 
+-        private final int a; final int getSpawnerChunks() { return this.a; } // Paper - OBFHELPER
+-        private final Object2IntOpenHashMap<EnumCreatureType> b; final Object2IntMap<EnumCreatureType> getEntityCountsByType() { return this.b; } // Paper - OBFHELPER
++        private int a; final int getSpawnerChunks() { return this.a; } // Paper - OBFHELPER
++        private final Object2IntOpenHashMap<EnumCreatureType> b; final Object2IntOpenHashMap<EnumCreatureType> getEntityCountsByType() { return this.b; } // Paper - OBFHELPER // Airplane - expand type for OBFHELPER, unfinal
+         private final SpawnerCreatureProbabilities c;
+         private final Object2IntMap<EnumCreatureType> d;
+         @Nullable
+@@ -539,6 +563,24 @@ public final class SpawnerCreature {
+         private EntityTypes<?> f;
+         private double g;
+ 
++        // Airplane start - implement reusable
++        protected void reset(int chunks) {
++            this.a = chunks;
++            this.b.clear();
++            this.c.reset();
++            this.e = null;
++            this.f = null;
++            this.g = 0;
++        }
++
++        private d(int i) {
++            this.a = i;
++            this.b = new Object2IntOpenHashMap<>();
++            this.c = new SpawnerCreatureProbabilities();
++            this.d = Object2IntMaps.unmodifiable(this.b);
++        }
++        // Airplane end
++
+         private d(int i, Object2IntOpenHashMap<EnumCreatureType> object2intopenhashmap, SpawnerCreatureProbabilities spawnercreatureprobabilities) {
+             this.a = i;
+             this.b = object2intopenhashmap;
+diff --git a/src/main/java/net/minecraft/server/SpawnerCreatureProbabilities.java b/src/main/java/net/minecraft/server/SpawnerCreatureProbabilities.java
+index 5a47fa391ae1285204e7316c371ddbc86f460f67..56c59bbbf31951762efa6182ad09cf3deb469569 100644
+--- a/src/main/java/net/minecraft/server/SpawnerCreatureProbabilities.java
++++ b/src/main/java/net/minecraft/server/SpawnerCreatureProbabilities.java
+@@ -6,10 +6,12 @@ import java.util.List;
+ 
+ public class SpawnerCreatureProbabilities {
+ 
+-    private final List<SpawnerCreatureProbabilities.a> a = Lists.newArrayList();
++    private final org.bukkit.craftbukkit.util.UnsafeList<SpawnerCreatureProbabilities.a> a = new org.bukkit.craftbukkit.util.UnsafeList<>(); // Airplane - use unsafe list
+ 
+     public SpawnerCreatureProbabilities() {}
+ 
++    public void reset() { this.a.setSize(0); } // Airplane
++
+     public void a(BlockPosition blockposition, double d0) {
+         if (d0 != 0.0D) {
+             this.a.add(new SpawnerCreatureProbabilities.a(blockposition, d0));
+@@ -25,9 +27,17 @@ public class SpawnerCreatureProbabilities {
+ 
+             SpawnerCreatureProbabilities.a spawnercreatureprobabilities_a;
+ 
++            // Airplane - rewrite to use indexed iteration
++            for (int i = 0; i < this.a.size(); i++) {
++                spawnercreatureprobabilities_a = this.a.unsafeGet(i); // use unsafe get if we're already rewriting to use unsafe list
++                d1 += spawnercreatureprobabilities_a.a(blockposition);
++            }
++            /*
+             for (Iterator iterator = this.a.iterator(); iterator.hasNext(); d1 += spawnercreatureprobabilities_a.a(blockposition)) {
+                 spawnercreatureprobabilities_a = (SpawnerCreatureProbabilities.a) iterator.next();
+             }
++             */
++            // Airplane end
+ 
+             return d1 * d0;
+         }
