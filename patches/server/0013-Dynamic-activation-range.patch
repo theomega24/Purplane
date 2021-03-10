@@ -147,10 +147,10 @@ index 4849829df1041568a9fcac6d16501fc0606d95da..de5d88aa109001d61519f098faef8194
      }
  
 diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
-index ec6e5766d3a7e77e0698093d966bd5a96775f642..7315c721d04a08ed100d0f8bd4ddc42862033ca1 100644
+index 850dae5f20649854f013c0e530a3325455b5db4a..88db6f24612cdf2bded3081db7cc42871bcfc3eb 100644
 --- a/src/main/java/net/minecraft/server/EntityVillager.java
 +++ b/src/main/java/net/minecraft/server/EntityVillager.java
-@@ -212,6 +212,8 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+@@ -210,6 +210,8 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
      }
      // Purpur end
  
@@ -159,7 +159,7 @@ index ec6e5766d3a7e77e0698093d966bd5a96775f642..7315c721d04a08ed100d0f8bd4ddc428
      @Override
      protected void mobTick() { mobTick(false); }
      protected void mobTick(boolean inactive) {
-@@ -221,7 +223,12 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
+@@ -219,7 +221,12 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
          boolean tick = (world.getTime() + brainTickOffset) % world.purpurConfig.villagerBrainTicks == 0;
          if (((WorldServer) world).getMinecraftServer().lagging ? tick : world.purpurConfig.villagerUseBrainTicksOnlyWhenLagging || tick)
          // Purpur end
