@@ -71,10 +71,10 @@ index f5fb3b3c08a05bede7ed1141c018bd0d16a19244..b38e7c40fe9cb56cb37769ce3a8c7969
          return (EntityTypes) IRegistry.a((IRegistry) IRegistry.ENTITY_TYPE, s, (Object) entitytypes_builder.a(s));
      }
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c068ad8970 100644
+index 3fe03b92658b157d6c7875dcaae6bbd41952ccd5..630f411a68574b6ece24b9adf6bb84f3060c30d5 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-@@ -641,7 +641,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -642,7 +642,9 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
          return d2 * d2 + d3 * d3;
      }
  
@@ -85,7 +85,7 @@ index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c0
          int i;
          int j;
  
-@@ -655,12 +657,16 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -656,12 +658,16 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
              j = MathHelper.floor(entityplayer.locZ() / 16.0D);
          }
  
@@ -106,7 +106,7 @@ index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c0
  
          return Math.max(Math.abs(k), Math.abs(l));
      }
-@@ -2499,11 +2505,17 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2500,11 +2506,17 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
                      boolean flag1 = this.tracker.attachedToPlayer;
  
                      if (!flag1) {
@@ -126,7 +126,7 @@ index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c0
                          }
                      }
  
-@@ -2533,8 +2545,10 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2534,8 +2546,10 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
          }
  
          private int b() {
@@ -138,7 +138,7 @@ index 3ae51a3a5d863d58fde73934ed100fbd62e2b279..754077e40a9cd46fd8d4a64f66aa54c0
              Iterator iterator = collection.iterator();
  
              while (iterator.hasNext()) {
-@@ -2546,6 +2560,8 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
+@@ -2547,6 +2561,8 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
                      i = j;
                  }
              }
