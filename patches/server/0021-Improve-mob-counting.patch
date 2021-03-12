@@ -20,10 +20,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-index e8a6bc2654e840395fee70d79695c5a395a4fc1b..168c164df81c96a2ceb61ef2855c73a9a8d18719 100644
+index 9cf3cd69661a140d34d17195c2cd6dc299c95ddf..19916957dd9db72cfd00005d31ffad8731d4a671 100644
 --- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
 +++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
-@@ -991,9 +991,9 @@ public class ChunkProviderServer extends IChunkProvider {
+@@ -992,9 +992,9 @@ public class ChunkProviderServer extends IChunkProvider {
                  for (EntityPlayer player : this.world.players) {
                      Arrays.fill(player.mobCounts, 0);
                  }
