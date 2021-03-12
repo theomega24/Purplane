@@ -19,21 +19,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 255bbd6e48b95c70fad02ba692c64c7579496827..2fb88927d87ef8225d99d2a0128a21e58bd536b6 100644
---- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-+++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-@@ -24,8 +24,8 @@ public class PaperVersionFetcher implements VersionFetcher {
-     @Nonnull
-     @Override
-     public String getVersionMessage(@Nonnull String serverVersion) {
--        String[] parts = serverVersion.substring("git-Tuinity-".length()).split("[-\\s]"); // Tuinity
--        String updateMessage = getUpdateStatusMessage("Spottedleaf/Tuinity", GITHUB_BRANCH_NAME, parts[0]); // Tuinity
-+        String[] parts = serverVersion.substring("git-Purplane-".length()).split("[-\\s]"); // Tuinity // Purplane
-+        String updateMessage = getUpdateStatusMessage("notOM3GA/Purplane", GITHUB_BRANCH_NAME, parts[0]); // Tuinity // Purplane
-         String history = getHistory();
- 
-         return history != null ? history + "\n" + updateMessage : updateMessage;
 diff --git a/src/main/java/net/pl3x/purpur/PurpurConfig.java b/src/main/java/net/pl3x/purpur/PurpurConfig.java
 index 5d75481660d5e11abe263f2a6343b87c75cca090..eddfaaecbccc074320992448ff28fafcc6b0efb0 100644
 --- a/src/main/java/net/pl3x/purpur/PurpurConfig.java
