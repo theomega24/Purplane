@@ -1,3 +1,5 @@
+# DISCONTINUED! Purpur has merged all of Airplanes patches. Just use Purpur.
+
 # Purplane
 i wanted to use Purpur and Airplane but it didn't exist so i made one...
 
